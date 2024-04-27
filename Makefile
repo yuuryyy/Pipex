@@ -6,7 +6,7 @@
 #    By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/12 19:24:10 by ychagri           #+#    #+#              #
-#    Updated: 2024/04/12 21:11:21 by ychagri          ###   ########.fr        #
+#    Updated: 2024/04/26 20:00:44 by ychagri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,6 +19,7 @@ CFLAGS	:= -Wall -Wextra -Werror
 CC		:= cc
 
 SRCS	:=	main.c \
+			mandatory/parse/check_files.c \
 
 OBGS	:= $(SRCS:.c=.o)
 

@@ -1,2 +1,0 @@
-This will be written to the file instead of the screen.
-3     1
