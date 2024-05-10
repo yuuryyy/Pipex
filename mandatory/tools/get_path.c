@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 23:58:27 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/10 00:20:34 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/05/10 02:54:57 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 char    *get_path(char **env)
 {
-    int i;
+    int     i;
     char    *path = NULL;
+
     i = 0;
     if (!env || !*env)
         return (NULL);
@@ -26,7 +27,6 @@ char    *get_path(char **env)
              path = ft_strdup(env[i] + 5);
              break ;
         }
-           
         else
             i++;
     }
