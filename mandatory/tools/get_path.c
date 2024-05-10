@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/12 20:58:53 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/10 00:39:13 by ychagri          ###   ########.fr       */
+/*   Created: 2024/05/09 23:58:27 by ychagri           #+#    #+#             */
+/*   Updated: 2024/05/10 00:20:34 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	PIPEX_H
-# define PIPEX_H
+#include "../Inc/pipex.h"
 
-# include "../../lib/Libft/libft.h"
-# include <string.h>
-
-void    check_files(char **argv);
-void    exec_cmd(char **argv, int *fd, char **, int );
-void    exec_cmd2(char **argv, int *fd, char **env, int file2);
-char    *get_path(char **env);
-
-#endif
+char    *get_path(char **env)
+{
+    int i;
+    char    *path = NULL;
+    i = 0;
+    if (!env || !*env)
+        return (NULL);
+    while (env[i])
+    {
+        if (strncmp(env[i], "PATH=", 5) == 0)
+        {
+             path = ft_strdup(env[i] + 5);
+             break ;
+        }
+           
+        else
+            i++;
+    }
+    return (path);
+}
