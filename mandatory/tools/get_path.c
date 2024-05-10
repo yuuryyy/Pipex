@@ -6,13 +6,13 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/09 23:58:27 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/10 02:54:57 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/05/11 00:22:08 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Inc/pipex.h"
 
-char    *get_path(char **env)
+char	*get_path(char **env)
 {
     int     i;
     char    *path = NULL;
