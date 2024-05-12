@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: youssra <youssra@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 20:51:48 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/11 23:14:24 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/05/12 19:11:05 by youssra          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	proc(char **argv, char **env, int *fd)
 	}
 	else
 	{
-		wait(0);
+		wait(NULL);
 		close(fd[1]);
 		close(file1);
 		exec_cmd2(argv, &fd[0], env, file2);

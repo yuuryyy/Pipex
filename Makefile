@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+         #
+#    By: youssra <youssra@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/12 19:24:10 by ychagri           #+#    #+#              #
-#    Updated: 2024/05/11 02:52:05 by ychagri          ###   ########.fr        #
+#    Updated: 2024/05/12 19:48:43 by youssra          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME	:= pipex
 
 HEADER	:= mandatory/Inc/pipex.h
 
-CFLAGS	:= -Wall -Wextra -Werror -fsanitize=address
+CFLAGS	:= -Wall -Wextra -Werror 
 
 CC		:= cc
 
@@ -25,17 +25,17 @@ SRCS	:=	main.c \
 
 OBGS	:= $(SRCS:.c=.o)
 
-LIBRARY	:=	lib/libft.a
+LIBRARY	:= lib/libft.a
 
-all :	$(NAME)
+all : $(NAME)
 
 lib :
 	make -C lib
 
 $(NAME) : $(OBGS) lib
-	$(CC) $(CFLAGS) $(LIBRARY) $(OBGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBGS) $(LIBRARY) -o $(NAME)
 
-%.o: %.c	$(HEADER)
+%.o: %.c $(HEADER)
 		$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
@@ -48,7 +48,7 @@ fclean:	clean
 
 re: fclean all
 
-push:	fclean
+push: fclean
 	git add .
 	git commit -m "pipekhs"
 	git push
