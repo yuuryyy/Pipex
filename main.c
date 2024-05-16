@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: youssra <youssra@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 20:51:48 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/12 19:11:05 by youssra          ###   ########.fr       */
+/*   Updated: 2024/05/17 00:31:48 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	main(int ac, char **argv, char **env)
 
 	if (ac != 5)
 		return (ft_putstr_fd("Error : invalid number of arguments.\n", 2), 1);
-	check_files(argv);
+	check_files(argv, ac);
 	if (pipe(fd) == -1)
 		return (ft_putstr_fd("pipe has failed\n", 2), 1);
 	err = proc(argv, env, fd);

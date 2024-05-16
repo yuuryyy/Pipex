@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_files.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: youssra <youssra@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:59:36 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/12 20:33:48 by youssra          ###   ########.fr       */
+/*   Updated: 2024/05/17 00:31:11 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	emp_arg(char **argv)
 	}
 }
 
-void	check_files(char **argv)
+void	check_files(char **argv, int ac)
 {
 	emp_arg(argv);
 	if ((access(argv[1], F_OK) == 0 && access(argv[1], R_OK) == -1)
@@ -52,12 +52,12 @@ void	check_files(char **argv)
 		ft_putchar_fd('\n', 2);
 		exit (1);
 	}
-	else if (access(argv[4], F_OK) == 0)
+	else if (access(argv[ac - 1], F_OK) == 0)
 	{
-		if (access(argv[4], W_OK) == -1)
+		if (access(argv[ac - 1], W_OK) == -1)
 		{
 			ft_putstr_fd("Permission denied: ", 2);
-			ft_putstr_fd(argv[4], 2);
+			ft_putstr_fd(argv[ac - 1], 2);
 			ft_putchar_fd('\n', 2);
 			exit (1);
 		}
