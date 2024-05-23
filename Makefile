@@ -3,18 +3,19 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: youssra <youssra@student.42.fr>            +#+  +:+       +#+         #
+#    By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/12 19:24:10 by ychagri           #+#    #+#              #
-#    Updated: 2024/05/12 19:48:43 by youssra          ###   ########.fr        #
+#    Updated: 2024/05/22 15:08:35 by ychagri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	:= pipex
 
+
 HEADER	:= mandatory/Inc/pipex.h
 
-CFLAGS	:= -Wall -Wextra -Werror 
+CFLAGS	:= -g -Wall -Wextra -Werror -fsanitize=address
 
 CC		:= cc
 
@@ -29,11 +30,14 @@ LIBRARY	:= lib/libft.a
 
 all : $(NAME)
 
+bonus : $(NAME_B)
+
 lib :
 	make -C lib
 
-$(NAME) : $(OBGS) lib
-	$(CC) $(CFLAGS) $(OBGS) $(LIBRARY) -o $(NAME)
+$(NAME) : $(OBGS)  lib
+	$(CC) $(CFLAGS) $(OBGS)  $(LIBRARY) -o $(NAME)
+
 
 %.o: %.c $(HEADER)
 		$(CC) $(CFLAGS) -c $< -o $@
@@ -47,6 +51,7 @@ fclean:	clean
 	rm -rf $(NAME)
 
 re: fclean all
+
 
 push: fclean
 	git add .

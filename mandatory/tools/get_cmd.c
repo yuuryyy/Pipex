@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: youssra <youssra@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 19:25:23 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/11 19:08:20 by youssra          ###   ########.fr       */
+/*   Updated: 2024/05/22 14:40:31 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Inc/pipex.h"
 
-void	cmd1(char **env, char **cmd)
+void	execution(char **env, char **cmd)
 {
 	char	*path;
 	char	**dirs;
@@ -39,40 +39,55 @@ void	cmd1(char **env, char **cmd)
 	}
 }
 
-void	exec_cmd(char **argv, int *fd, char **env, int file1)
+void    exec_cmds(int *fd_write, char *argv, char **env)
 {
 	char	**cmd;
 
-	cmd = ft_split(argv[2], ' ');
-	if (dup2(*fd, STDOUT_FILENO) == -1)
+	cmd = ft_split(argv, ' ');
+	if (dup2(*fd_write, STDOUT_FILENO) == -1)
 	{
 		ft_putstr_fd("dup2() has failed!!\n", 2);
 		exit(1);
 	}
-	close(0);
-	if (dup2(file1, STDIN_FILENO) == -1)
+	if (ft_strchr2(cmd[0], '/') == 0)
+		execution(env, cmd);
+	else
 	{
-		ft_putstr_fd("dup2() has failed!!\n", 2);
-		exit(1);
+		if (execve(cmd[0], cmd, NULL) == -1)
+		{
+			ft_putstr_fd("No such a file or directory: ", 2);
+			ft_putstr_fd(cmd[0], 2);
+			exit(1);
+		}
 	}
-	cmd1(env, cmd);
 }
 
-void	exec_cmd2(char **argv, int *fd, char **env, int file2)
+void	cmd_outfile(char *argv, char **env)
 {
-	char	**cmd2;
+	int		pid;
+	char	**cmd;
 
-	cmd2 = ft_split(argv[3], ' ');
-	if (dup2(file2, STDOUT_FILENO) == -1)
+	pid = fork();
+	if (pid == -1)
 	{
-		ft_putstr_fd("dup2() has failed!!\n", 2);
-		exit(1);
+		ft_putstr_fd("fork() has failed!!\n", 2);
+		exit(1);	
 	}
-	close(0);
-	if (dup2(*fd, STDIN_FILENO) == -1)
+	if (pid == 0)
 	{
-		ft_putstr_fd("dup2() has failed!!\n", 2);
-		exit(1);
+		cmd = ft_split(argv, ' ');
+		if (ft_strchr2(cmd[0], '/') == 0)
+		execution(env, cmd);
+		else
+		{
+			if (execve(cmd[0], cmd, NULL) == -1)
+			{
+				ft_putstr_fd("No such a file or directory: ", 2);
+				ft_putstr_fd(cmd[0], 2);
+				exit(1);
+			}
+		}
 	}
-	cmd1(env, cmd2);
+	else
+		waitpid(pid, NULL, 0);
 }

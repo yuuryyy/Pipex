@@ -6,55 +6,82 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 20:51:48 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/17 00:31:48 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/05/23 09:16:09 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mandatory/Inc/pipex.h"
 
-int	proc(char **argv, char **env, int *fd)
+void    forking(char *argv, char **env)
 {
-	int		file1;
-	int		file2;
-	pid_t	pid;
+    int		fd[2];
+	int		pid;
 
-	file1 = open(argv[1], O_RDONLY);
-	file2 = open(argv[4], O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (file1 == -1 || file2 == -1)
-		return (-1);
+	if (pipe(fd) == -1)
+	{
+		ft_putstr_fd("pipe() has failed!!\n", 2);
+		exit(1);	
+	}
 	pid = fork();
 	if (pid == -1)
-		return (0);
-	else if (pid == 0)
+	{
+		ft_putstr_fd("fork() has failed!!\n", 2);
+		exit(1);	
+	}
+	if (pid == 0)
 	{
 		close(fd[0]);
-		close(file2);
-		exec_cmd(argv, &fd[1], env, file1);
+		exec_cmds(&fd[1], argv, env);
 	}
 	else
 	{
-		wait(NULL);
 		close(fd[1]);
-		close(file1);
-		exec_cmd2(argv, &fd[0], env, file2);
+		waitpid(pid, NULL, 0);
+		if (dup2(fd[0], STDIN_FILENO) == -1)
+		{
+			ft_putstr_fd("dup2() has failed!!\n", 2);
+			exit(1);
+		}
 	}
-	return (1);
+}
+
+void	multipipe(char **argv, int ac, char **env)
+{
+	int	outfile;
+	int	infile;
+	int	cmd;
+
+	infile = open(argv[1], O_RDONLY);
+	outfile = open(argv[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (infile == -1 || outfile == -1)
+	{
+		ft_putstr_fd("open() has failed.\n", 2);
+		exit(1);
+	}
+	cmd = 2;
+	if (dup2(infile, STDIN_FILENO) == -1)
+	{
+		ft_putstr_fd("dup2() has failed!!\n", 2);
+		exit(1);
+	}
+	while (argv[cmd] && cmd < ac - 2)
+		forking(argv[cmd++], env);
+	if (dup2(outfile, STDOUT_FILENO) == -1)
+	{
+		ft_putstr_fd("dup2() has failed!!\n", 2);
+		exit(1);
+	}
+	cmd_outfile(argv[ac - 2], env);
 }
 
 int	main(int ac, char **argv, char **env)
 {
-	int	fd[2];
-	int	err;
-
-	if (ac != 5)
+	if (ac < 5)
 		return (ft_putstr_fd("Error : invalid number of arguments.\n", 2), 1);
-	check_files(argv, ac);
-	if (pipe(fd) == -1)
-		return (ft_putstr_fd("pipe has failed\n", 2), 1);
-	err = proc(argv, env, fd);
-	if (err == -1)
-		return (ft_putstr_fd("open() has failed.\n", 2), 1);
-	else if (err == 0)
-		return (ft_putstr_fd("fork() has failed.\n", 2), 1);
+	if (ft_strncmp("here_doc", argv[1], 9) != 0)
+	{
+		check_files(argv, ac);
+		multipipe(argv, ac, env);
+	}
 	return (0);
 }
