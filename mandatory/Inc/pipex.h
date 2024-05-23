@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 20:58:53 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/22 13:05:12 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:38:11 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,11 @@
 # include <string.h>
 # include <sys/wait.h>
 
-void    exec_cmds(int *fd_write, char *argv, char **env);
-void	check_bin(char **cmd);
+void	exec_cmds(int *fd_write, char *argv, char **env);
 void	cmd_outfile(char *argv, char **env);
-void	check_files(char **argv, int ac);
 void	execution(char **env, char **cmd);
+void	check_files(char **argv, int ac);
 char	*get_path(char **env);
+void	free_arr(char **str);
 
 #endif

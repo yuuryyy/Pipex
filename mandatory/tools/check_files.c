@@ -6,12 +6,11 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:59:36 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/22 13:16:03 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:36:43 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Inc/pipex.h"
-
 
 void	check_files(char **argv, int ac)
 {
@@ -37,4 +36,20 @@ void	check_files(char **argv, int ac)
 		}
 		return ;
 	}
+}
+
+void	free_arr(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	i--;
+	while (str[i])
+	{
+		free(str[i]);
+		i--;
+	}
+	free(str);
 }

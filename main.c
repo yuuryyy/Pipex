@@ -6,27 +6,45 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 20:51:48 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/23 09:16:09 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/05/23 12:44:32 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mandatory/Inc/pipex.h"
 
-void    forking(char *argv, char **env)
+void	forking2(int fd[2], pid_t pid)
 {
-    int		fd[2];
-	int		pid;
+	int		status;
+
+	close(fd[1]);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+	{
+		if (WEXITSTATUS(status) == 1)
+			exit(1);
+	}
+	if (dup2(fd[0], STDIN_FILENO) == -1)
+	{
+		ft_putstr_fd("dup2() has failed!!\n", 2);
+		exit(1);
+	}
+}
+
+void	forking(char *argv, char **env)
+{
+	int	fd[2];
+	int	pid;
 
 	if (pipe(fd) == -1)
 	{
 		ft_putstr_fd("pipe() has failed!!\n", 2);
-		exit(1);	
+		exit(1);
 	}
 	pid = fork();
 	if (pid == -1)
 	{
 		ft_putstr_fd("fork() has failed!!\n", 2);
-		exit(1);	
+		exit(1);
 	}
 	if (pid == 0)
 	{
@@ -34,15 +52,7 @@ void    forking(char *argv, char **env)
 		exec_cmds(&fd[1], argv, env);
 	}
 	else
-	{
-		close(fd[1]);
-		waitpid(pid, NULL, 0);
-		if (dup2(fd[0], STDIN_FILENO) == -1)
-		{
-			ft_putstr_fd("dup2() has failed!!\n", 2);
-			exit(1);
-		}
-	}
+		forking2(fd, pid);
 }
 
 void	multipipe(char **argv, int ac, char **env)
