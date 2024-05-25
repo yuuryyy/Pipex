@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/02 19:08:16 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/08 23:20:11 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/05/25 20:12:46 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
-# include "../Get_next_line/get_next_line.h" 
-# include "../Ft_printf/ft_printf.h" 
+# include <fcntl.h>
 
 typedef struct s_list
 {
@@ -34,6 +33,7 @@ int		ft_isprint(int c);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
 int		ft_lstsize(t_list *lst);
+int		ft_strchr(const char *s, int c);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 
@@ -46,7 +46,6 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	**ft_split(char *s, char c);
 char	*ft_itoa(int n);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
-char	*ft_strchr(const char *s, int c);
 
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 void	*ft_memset(void *b, int c, size_t len);

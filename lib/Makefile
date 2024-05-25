@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: youssra <youssra@student.42.fr>            +#+  +:+       +#+         #
+#    By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/03 01:10:21 by ychagri           #+#    #+#              #
-#    Updated: 2024/05/12 19:03:03 by youssra          ###   ########.fr        #
+#    Updated: 2024/05/25 20:10:09 by ychagri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,15 +14,11 @@ NAME = libft.a
 
 CC = cc 
 
-CFLAGS = -g -Wall -Wextra 
+CFLAGS = -g -Wall -Wextra -Werror
 
 ARC = ar rc
 
 LIBRARY = libft.h
-
-LIBRARY_P = Ft_printf/ft_printf.h
-
-LIBRARY_G = Get_next_line/get_next_line.h
 
 SRC = Libft/ft_isdigit.c Libft/ft_memset.c  Libft/ft_isprint.c Libft/ft_split.c Libft/ft_itoa.c Libft/ft_strmapi.c \
 		Libft/ft_bzero.c   Libft/ft_atoi.c Libft/ft_strncmp.c Libft/ft_memchr.c Libft/ft_putstr_fd.c Libft/ft_striteri.c \
@@ -33,35 +29,19 @@ SRC = Libft/ft_isdigit.c Libft/ft_memset.c  Libft/ft_isprint.c Libft/ft_split.c 
 		Libft/ft_lstnew.c  Libft/ft_lstadd_front.c Libft/ft_lstadd_back.c Libft/ft_lstsize.c Libft/ft_lstlast.c Libft/ft_lstdelone.c \
 		Libft/ft_lstclear.c Libft/ft_lstiter.c Libft/ft_lstmap.c\
 
-SRC_P = Ft_printf/ft_putchar.c \
-		Ft_printf/ft_putnbr.c \
-		Ft_printf/ft_putstr.c \
-		Ft_printf/ft_hex.c \
-		Ft_printf/ft_printf.c \
-		Ft_printf/ft_putadd.c Ft_printf/u.c \
-
-SRC_G = Get_next_line/get_next_line.c \
-		Get_next_line/get_next_line_utils.c \
 
 OBJS = $(SRC:.c=.o)
 
-OBJS_P = $(SRC_P:.c=.o)
-
-OBJS_G = $(SRC_G:.c=.o)
-
-
 all:$(NAME)
 
-$(NAME): $(OBJS) $(OBJS_P) $(OBJS_G)
-	$(ARC) $(NAME) $(OBJS) $(OBJS_P) $(OBJS_G)
+$(NAME): $(OBJS) $
+	$(ARC) $(NAME) $(OBJS) $
 	
-%.o : %.c $(LIBRARY) $(LIBRARY_G) $(LIBRARY_P)
+%.o : %.c $(LIBRARY) 
 	$(CC) $(CFLAGS) -c $<
 
 clean:
 	rm -f $(OBJS)
-	rm -f $(OBJS_G)
-	rm -f $(OBJS_P)
 
 fclean: clean
 	rm -f $(NAME)

@@ -6,7 +6,7 @@
 #    By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/12 19:24:10 by ychagri           #+#    #+#              #
-#    Updated: 2024/05/23 09:56:51 by ychagri          ###   ########.fr        #
+#    Updated: 2024/05/23 18:50:04 by ychagri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME	:= pipex
 
 HEADER	:= mandatory/Inc/pipex.h
 
-CFLAGS	:= -g -Wall -Wextra -Werror
+CFLAGS	:= -g -Wall -Wextra -Werror -fsanitize=address
 
 CC		:= cc
 
@@ -23,6 +23,7 @@ SRCS	:=	main.c \
 			mandatory/tools/check_files.c \
 			mandatory/tools/get_cmd.c \
 			mandatory/tools/get_path.c \
+			mandatory/tools/here_doc.c \
 
 OBGS	:= $(SRCS:.c=.o)
 

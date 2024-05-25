@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 19:25:23 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/23 12:30:18 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/05/25 20:43:43 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,7 @@ void	execution(char **env, char **cmd)
 	free(fullpath);
 	err_set = execvee(dirs, cmd);
 	if (err_set == -1)
-	{
-		ft_putstr_fd("command not found: ", 2);
-		ft_putstr_fd(cmd[0], 2);
-		exit(1);
-	}
+		return(ft_putstr_fd("command not found: ", 2),ft_putstr_fd(cmd[0], 2),exit(1));
 }
 
 void	exec_cmds(int *fd_write, char *argv, char **env)
@@ -69,7 +65,7 @@ void	exec_cmds(int *fd_write, char *argv, char **env)
 		ft_putstr_fd("dup2() has failed!!\n", 2);
 		exit(1);
 	}
-	if (ft_strchr2(cmd[0], '/') == 0)
+	if (ft_strchr(cmd[0], '/') == 0)
 		execution(env, cmd);
 	else
 	{
@@ -87,7 +83,7 @@ void	outfile2(char *arg, char **env)
 	char	**cmd;
 
 	cmd = ft_split(arg, ' ');
-	if (ft_strchr2(cmd[0], '/') == 0)
+	if (ft_strchr(cmd[0], '/') == 0)
 		execution(env, cmd);
 	else
 	{

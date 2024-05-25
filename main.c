@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 20:51:48 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/23 12:44:32 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/05/23 18:37:37 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,5 +93,7 @@ int	main(int ac, char **argv, char **env)
 		check_files(argv, ac);
 		multipipe(argv, ac, env);
 	}
+	else
+		here_doc(ac, argv, env);
 	return (0);
 }
