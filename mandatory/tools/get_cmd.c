@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 19:25:23 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/25 20:43:43 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/03 17:24:39 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	execution(char **env, char **cmd)
 	free(fullpath);
 	err_set = execvee(dirs, cmd);
 	if (err_set == -1)
-		return(ft_putstr_fd("command not found: ", 2),ft_putstr_fd(cmd[0], 2),exit(1));
+		return(ft_putstr_fd("command not found: ", 2),ft_putstr_fd(cmd[0], 2),exit(127));
 }
 
 void	exec_cmds(int *fd_write, char *argv, char **env)
@@ -73,7 +73,7 @@ void	exec_cmds(int *fd_write, char *argv, char **env)
 		{
 			ft_putstr_fd("No such a file or directory: ", 2);
 			ft_putstr_fd(cmd[0], 2);
-			exit(1);
+			exit(0);//edit
 		}
 	}
 }
@@ -91,7 +91,7 @@ void	outfile2(char *arg, char **env)
 		{
 			ft_putstr_fd("No such a file or directory: ", 2);
 			ft_putstr_fd(cmd[0], 2);
-			exit(1);
+			exit(0);
 		}
 	}
 }
@@ -105,7 +105,7 @@ void	cmd_outfile(char *argv, char **env)
 	if (pid == -1)
 	{
 		ft_putstr_fd("fork() has failed!!\n", 2);
-		exit(1);
+		exit(127);
 	}
 	if (pid == 0)
 		outfile2(argv, env);
@@ -115,7 +115,7 @@ void	cmd_outfile(char *argv, char **env)
 		if (WIFEXITED(status))
 		{
 			if (WEXITSTATUS(status) == 1)
-				exit(1);
+				exit(127);
 		}
 	}
 }

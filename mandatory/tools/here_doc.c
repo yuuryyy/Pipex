@@ -41,11 +41,6 @@ int	open_file(int ac, char **argv)
 {
 	int	outfile;
 
-	if (ac != 6)
-	{
-		ft_putstr_fd("Invalid number of argument.\n", 2);
-		exit(1);
-	}
 	if (access(argv[ac - 1], F_OK) == 0)
 	{
 		if (access(argv[ac - 1], W_OK) == -1)
@@ -56,11 +51,17 @@ int	open_file(int ac, char **argv)
 			exit (1);
 		}
 	}
-	outfile = open(argv[ac - 1], O_RDWR | O_APPEND | O_CREAT, 0644);
-	if (outfile == -1)
+	if ((outfile = open(argv[ac - 1], O_RDWR | O_APPEND | O_CREAT, 0644)) == -1)
 	{
-		ft_putstr_fd("open() has failed.\n", 2);
-		exit(1);
+		if (strchr(argv[ac - 1], '/'))
+		{
+			ft_putstr_fd("No such file or directory: ", 2);
+			ft_putstr_fd(argv[ac - 1], 2);
+			ft_putstr_fd("\n", 2);
+		}
+		else
+			ft_putstr_fd("open() has failed.\n", 2);
+		exit(127);
 	}
 	return (outfile);
 }
@@ -133,7 +134,7 @@ void	here_doc(int ac, char **argv, char **env)
 		if (WIFEXITED(status))
 		{
 			if (WEXITSTATUS(status) == 1)
-				exit(1);
+				exit(127);
 		}
 		if (dup2(fd[0][0], STDIN_FILENO) == -1)
 			return (ft_putstr_fd("dup2() has failed!!\n", 2), exit(1));

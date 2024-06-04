@@ -6,7 +6,7 @@
 #    By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/12 19:24:10 by ychagri           #+#    #+#              #
-#    Updated: 2024/05/23 18:50:04 by ychagri          ###   ########.fr        #
+#    Updated: 2024/05/26 21:39:20 by ychagri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ NAME	:= pipex
 
 HEADER	:= mandatory/Inc/pipex.h
 
-CFLAGS	:= -g -Wall -Wextra -Werror -fsanitize=address
+CFLAGS	:= -g -Wall -Wextra -Werror
+#  -fsanitize=address
 
 CC		:= cc
 

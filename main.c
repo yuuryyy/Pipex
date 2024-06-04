@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 20:51:48 by ychagri           #+#    #+#             */
-/*   Updated: 2024/05/23 18:37:37 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/03 21:03:37 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,15 @@
 void	forking2(int fd[2], pid_t pid)
 {
 	int		status;
+	int		code;
 
 	close(fd[1]);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 	{
-		if (WEXITSTATUS(status) == 1)
-			exit(1);
+		code = WEXITSTATUS(status);
+		if (code)
+			exit(code);
 	}
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 	{
@@ -65,8 +67,9 @@ void	multipipe(char **argv, int ac, char **env)
 	outfile = open(argv[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (infile == -1 || outfile == -1)
 	{
-		ft_putstr_fd("open() has failed.\n", 2);
-		exit(1);
+		if (outfile == -1 && ft_strchr(argv[ac - 1], '/'))
+			return (ft_putstr_fd("No such file or directory: ", 2), ft_putstr_fd(argv[ac - 1], 2), ft_putstr_fd("\n", 2), exit(127));
+		return (ft_putstr_fd("open() has failed.\n", 2), exit(1));
 	}
 	cmd = 2;
 	if (dup2(infile, STDIN_FILENO) == -1)
@@ -84,8 +87,15 @@ void	multipipe(char **argv, int ac, char **env)
 	cmd_outfile(argv[ac - 2], env);
 }
 
+void f()
+{
+	dup2(STDERR_FILENO, STDOUT_FILENO);
+	system("leaks pipex");
+}
+
 int	main(int ac, char **argv, char **env)
 {
+	// atexit(f);
 	if (ac < 5)
 		return (ft_putstr_fd("Error : invalid number of arguments.\n", 2), 1);
 	if (ft_strncmp("here_doc", argv[1], 9) != 0)
@@ -94,6 +104,13 @@ int	main(int ac, char **argv, char **env)
 		multipipe(argv, ac, env);
 	}
 	else
+	{
+		if (ac != 6)
+		{
+			ft_putstr_fd("Invalid number of argument.\n", 2);
+			return (1);
+		}
 		here_doc(ac, argv, env);
+	}
 	return (0);
 }

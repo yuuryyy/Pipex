@@ -1,3 +1,26 @@
        6
        3
        4
+Process:         pipex [23745]
+Path:            /Volumes/VOLUME/*/pipex
+Load Address:    0x1060b7000
+Identifier:      pipex
+Version:         ???
+Code Type:       X86-64
+Parent Process:  zsh [8002]
+
+Date/Time:       2024-05-26 21:41:03.053 +0100
+Launch Time:     2024-05-26 21:40:58.067 +0100
+OS Version:      Mac OS X 10.15.7 (19H2026)
+Report Version:  7
+Analysis Tool:   /Applications/Xcode.app/Contents/Developer/usr/bin/leaks
+Analysis Tool Version:  Xcode 12.4 (12D4e)
+
+Physical footprint:         312K
+Physical footprint (peak):  312K
+----
+
+leaks Report Version: 4.0
+Process 23745: 158 nodes malloced for 8 KB
+Process 23745: 0 leaks for 0 total leaked bytes.
+
