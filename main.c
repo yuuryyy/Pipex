@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 20:51:48 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/03 21:03:37 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/06 22:37:40 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,15 @@ void	forking2(int fd[2], pid_t pid)
 
 	close(fd[1]);
 	waitpid(pid, &status, 0);
+	if (!WIFEXITED(status))
+	{
+		code = WEXITSTATUS(status);
+		exit(code);
+	}
 	if (WIFEXITED(status))
 	{
 		code = WEXITSTATUS(status);
-		if (code)
+		if (code != 0)
 			exit(code);
 	}
 	if (dup2(fd[0], STDIN_FILENO) == -1)
@@ -89,7 +94,7 @@ void	multipipe(char **argv, int ac, char **env)
 
 void f()
 {
-	dup2(STDERR_FILENO, STDOUT_FILENO);
+	// dup2(STDERR_FILENO, STDOUT_FILENO);
 	system("leaks pipex");
 }
 

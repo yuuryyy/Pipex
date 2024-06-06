@@ -58,10 +58,11 @@ int	open_file(int ac, char **argv)
 			ft_putstr_fd("No such file or directory: ", 2);
 			ft_putstr_fd(argv[ac - 1], 2);
 			ft_putstr_fd("\n", 2);
+			exit(127);
 		}
 		else
 			ft_putstr_fd("open() has failed.\n", 2);
-		exit(127);
+		exit(1);
 	}
 	return (outfile);
 }
@@ -119,6 +120,7 @@ void	here_doc(int ac, char **argv, char **env)
 	pid_t	pid;
 	int		outfile;
 	int		fd[2][2];
+	int		code;
 	int		status;
 
 	outfile = open_file(ac, argv);
@@ -131,11 +133,17 @@ void	here_doc(int ac, char **argv, char **env)
 	{
 		close(fd[0][1]);
 		waitpid(pid, &status, 0);
+		if (!WIFEXITED(status))
+		{
+			code = WEXITSTATUS(status);
+			exit(code);
+		}
 		if (WIFEXITED(status))
 		{
-			if (WEXITSTATUS(status) == 1)
-				exit(127);
-		}
+			code = WEXITSTATUS(status);
+			if (code != 0)
+				exit(code);
+		}	
 		if (dup2(fd[0][0], STDIN_FILENO) == -1)
 			return (ft_putstr_fd("dup2() has failed!!\n", 2), exit(1));
 		exec_cmds(&outfile, argv[4], env);
