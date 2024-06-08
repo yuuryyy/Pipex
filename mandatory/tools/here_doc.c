@@ -12,8 +12,6 @@
 
 #include "../Inc/pipex.h"
 
-
-
 void	open_file(int ac, char **argv, int *outfile)
 {
 	if (access(argv[ac - 1], F_OK) == 0)
@@ -26,11 +24,12 @@ void	open_file(int ac, char **argv, int *outfile)
 			exit (1);
 		}
 	}
-	if ((*outfile = open(argv[ac - 1], O_RDWR | O_APPEND | O_CREAT, 0644)) == -1)
+	*outfile = open(argv[ac - 1], O_RDWR | O_APPEND | O_CREAT, 0644);
+	if (*outfile == -1)
 	{
 		if (strchr(argv[ac - 1], '/'))
 		{
-			return (ft_putstr_fd("No such file or directory: ", 2), 
+			return (ft_putstr_fd("No such file or directory: ", 2),
 				ft_putstr_fd(argv[ac - 1], 2), ft_putstr_fd("\n", 2), exit(1));
 		}
 		else
@@ -38,6 +37,7 @@ void	open_file(int ac, char **argv, int *outfile)
 		exit(1);
 	}
 }
+
 char	*ft_strjoin2(char *s1, char *s2)
 {
 	char	*join;
@@ -62,7 +62,6 @@ char	*ft_strjoin2(char *s1, char *s2)
 	join[i + j] = '\0';
 	return (join);
 }
-
 
 void	read_line(char *limiter, int *fd)
 {

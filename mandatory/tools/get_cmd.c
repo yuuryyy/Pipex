@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 19:25:23 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/08 01:24:35 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/08 17:01:12 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	execvee(char **dirs, char **cmd)
 		free(path);
 		i++;
 	}
-	free_arr(dirs);
 	return (err);
 }
 
@@ -47,7 +46,8 @@ void	execution(char **env, char **cmd)
 	}
 	err_set = execvee(dirs, cmd);
 	if (err_set == -1)
-		return(ft_putstr_fd("command not found: ", 2),ft_putstr_fd(cmd[0], 2),ft_putstr_fd("\n", 2),exit(127));
+		return (ft_putstr_fd("command not found: ", 2),
+			ft_putstr_fd(cmd[0], 2), ft_putstr_fd("\n", 2), exit(127));
 }
 
 void	outfile2(char *arg, char **env)
@@ -78,7 +78,7 @@ void	cmd_outfile(char *argv, char **env)
 
 	pid = fork();
 	if (pid == -1)
-		return(ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
+		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
 	if (pid == 0)
 		outfile2(argv, env);
 	else
@@ -89,7 +89,7 @@ void	cmd_outfile(char *argv, char **env)
 			code = WEXITSTATUS(status);
 			if (code)
 				exit(code);
-		}	
+		}
 	}
 }
 
@@ -115,8 +115,9 @@ void	exec_cmds(int *fd_write, char *argv, char **env)
 	{
 		if (execve(cmd[0], cmd, NULL) == -1)
 		{
-			return(close(*fd_write), ft_putstr_fd("No such a file or directory: ", 2),
-					ft_putstr_fd(cmd[0], 2), ft_putchar_fd('\n', 2), free_arr(cmd), exit(127));
+			return (ft_putstr_fd("No such a file or directory: ", 2),
+				ft_putstr_fd(cmd[0], 2), ft_putchar_fd('\n', 2),
+				free_arr(cmd), close(*fd_write), exit(127));
 		}
 	}
 }
