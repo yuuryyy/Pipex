@@ -6,40 +6,29 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 19:25:23 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/08 01:01:26 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/08 01:24:35 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Inc/pipex.h"
 #include <sys/wait.h>
 
-void	exec_cmds(int *fd_write, char *argv, char **env)
+int	execvee(char **dirs, char **cmd)
 {
-	char	**cmd;
+	char	*path;
+	int		i;
+	int		err;
 
-	cmd = ft_split(argv, ' ');
-	if (!cmd)
+	i = 0;
+	while (dirs[i])
 	{
-		ft_putstr_fd("ft_split has failed ", 2);
-		close(*fd_write);
-		exit(1);
+		path = ft_strjoin(dirs[i], cmd[0], '/');
+		err = execve(path, cmd, NULL);
+		free(path);
+		i++;
 	}
-	if (dup2(*fd_write, STDOUT_FILENO) == -1)
-	{
-		ft_putstr_fd("dup2() has failed!!\n", 2);
-		exit(1);
-	}
-	if (ft_strchr(cmd[0], '/') == 0)
-		execution(env, cmd);
-	else
-	{
-		if (execve(cmd[0], cmd, NULL) == -1)
-		{
-			free_arr(cmd);
-			return(close(*fd_write), ft_putstr_fd("No such a file or directory: ", 2),
-					ft_putstr_fd(cmd[0], 2), ft_putchar_fd('\n', 2),exit(127));
-		}
-	}
+	free_arr(dirs);
+	return (err);
 }
 
 void	execution(char **env, char **cmd)
@@ -61,22 +50,24 @@ void	execution(char **env, char **cmd)
 		return(ft_putstr_fd("command not found: ", 2),ft_putstr_fd(cmd[0], 2),ft_putstr_fd("\n", 2),exit(127));
 }
 
-int	execvee(char **dirs, char **cmd)
+void	outfile2(char *arg, char **env)
 {
-	char	*path;
-	int		i;
-	int		err;
+	char	**cmd;
 
-	i = 0;
-	while (dirs[i])
+	cmd = ft_split(arg, ' ');
+	if (ft_strchr(cmd[0], '/') == 0)
+		execution(env, cmd);
+	else
 	{
-		path = ft_strjoin(dirs[i], cmd[0], '/');
-		err = execve(path, cmd, NULL);
-		free(path);
-		i++;
+		if (execve(cmd[0], cmd, NULL) == -1)
+		{
+			free_arr(cmd);
+			ft_putstr_fd("No such a file or directory: ", 2);
+			ft_putstr_fd(cmd[0], 2);
+			ft_putstr_fd("\n", 2);
+			exit(127);
+		}
 	}
-	free_arr(dirs);
-	return (err);
 }
 
 void	cmd_outfile(char *argv, char **env)
@@ -101,21 +92,31 @@ void	cmd_outfile(char *argv, char **env)
 		}	
 	}
 }
-void	outfile2(char *arg, char **env)
+
+void	exec_cmds(int *fd_write, char *argv, char **env)
 {
 	char	**cmd;
 
-	cmd = ft_split(arg, ' ');
+	cmd = ft_split(argv, ' ');
+	if (!cmd)
+	{
+		ft_putstr_fd("ft_split has failed ", 2);
+		close(*fd_write);
+		exit(1);
+	}
+	if (dup2(*fd_write, STDOUT_FILENO) == -1)
+	{
+		ft_putstr_fd("dup2() has failed!!\n", 2);
+		exit(1);
+	}
 	if (ft_strchr(cmd[0], '/') == 0)
 		execution(env, cmd);
 	else
 	{
 		if (execve(cmd[0], cmd, NULL) == -1)
 		{
-			free_arr(cmd);
-			ft_putstr_fd("No such a file or directory: ", 2);
-			ft_putstr_fd(cmd[0], 2);
-			exit(127);
+			return(close(*fd_write), ft_putstr_fd("No such a file or directory: ", 2),
+					ft_putstr_fd(cmd[0], 2), ft_putchar_fd('\n', 2), free_arr(cmd), exit(127));
 		}
 	}
 }

@@ -12,6 +12,32 @@
 
 #include "../Inc/pipex.h"
 
+
+
+void	open_file(int ac, char **argv, int *outfile)
+{
+	if (access(argv[ac - 1], F_OK) == 0)
+	{
+		if (access(argv[ac - 1], W_OK) == -1)
+		{
+			ft_putstr_fd("Permission denied: ", 2);
+			ft_putstr_fd(argv[ac - 1], 2);
+			ft_putchar_fd('\n', 2);
+			exit (1);
+		}
+	}
+	if ((*outfile = open(argv[ac - 1], O_RDWR | O_APPEND | O_CREAT, 0644)) == -1)
+	{
+		if (strchr(argv[ac - 1], '/'))
+		{
+			return (ft_putstr_fd("No such file or directory: ", 2), 
+				ft_putstr_fd(argv[ac - 1], 2), ft_putstr_fd("\n", 2), exit(1));
+		}
+		else
+			ft_putstr_fd("open() has failed.\n", 2);
+		exit(1);
+	}
+}
 char	*ft_strjoin2(char *s1, char *s2)
 {
 	char	*join;
@@ -37,35 +63,6 @@ char	*ft_strjoin2(char *s1, char *s2)
 	return (join);
 }
 
-int	open_file(int ac, char **argv)
-{
-	int	outfile;
-
-	if (access(argv[ac - 1], F_OK) == 0)
-	{
-		if (access(argv[ac - 1], W_OK) == -1)
-		{
-			ft_putstr_fd("Permission denied: ", 2);
-			ft_putstr_fd(argv[ac - 1], 2);
-			ft_putchar_fd('\n', 2);
-			exit (1);
-		}
-	}
-	if ((outfile = open(argv[ac - 1], O_RDWR | O_APPEND | O_CREAT, 0644)) == -1)
-	{
-		if (strchr(argv[ac - 1], '/'))
-		{
-			ft_putstr_fd("No such file or directory: ", 2);
-			ft_putstr_fd(argv[ac - 1], 2);
-			ft_putstr_fd("\n", 2);
-			exit(127);
-		}
-		else
-			ft_putstr_fd("open() has failed.\n", 2);
-		exit(1);
-	}
-	return (outfile);
-}
 
 void	read_line(char *limiter, int *fd)
 {
@@ -87,7 +84,7 @@ void	read_line(char *limiter, int *fd)
 			return (ft_putstr_fd("read() has failed!!\n", 2), exit(1));
 		if (*c == '\n')
 			buffer = ft_strjoin2(buffer, "\n");
-		if (strncmp(buffer, limiter, strlen(limiter)) == 0)
+		if (ft_strncmp(buffer, limiter, strlen(limiter)) == 0)
 			break ;
 		write (fd[1], buffer, ft_strlen(buffer));
 	}
@@ -95,24 +92,19 @@ void	read_line(char *limiter, int *fd)
 	free(buffer);
 }
 
-void	child_process(int fd[2][2], char **argv, char **env, pid_t pid)
+void	child_process(int fd[2][2], char **argv, char **env)
 {
 	char	*limiter;
 
-	if (pid == -1)
-		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
-	else
-	{
-		close(fd[0][0]);
-		limiter = ft_strjoin2(argv[2], "\n");
-		if (pipe(fd[1]) == -1)
-			return (ft_putstr_fd("pipe() has failed!!\n", 2), exit(1));
-		read_line(limiter, fd[1]);
-		if (dup2(fd[1][0], STDIN_FILENO) == -1)
-			return (ft_putstr_fd("dup2() has failed!!\n", 2), exit(1));
-		close(fd[1][1]);
-		exec_cmds(&fd[0][1], argv[3], env);
-	}
+	close(fd[0][0]);
+	limiter = ft_strjoin2(argv[2], "\n");
+	if (pipe(fd[1]) == -1)
+		return (ft_putstr_fd("pipe() has failed!!\n", 2), exit(1));
+	read_line(limiter, fd[1]);
+	if (dup2(fd[1][0], STDIN_FILENO) == -1)
+		return (ft_putstr_fd("dup2() has failed!!\n", 2), exit(1));
+	close(fd[1][1]);
+	exec_cmds(&fd[0][1], argv[3], env);
 }
 
 void	here_doc(int ac, char **argv, char **env)
@@ -120,30 +112,19 @@ void	here_doc(int ac, char **argv, char **env)
 	pid_t	pid;
 	int		outfile;
 	int		fd[2][2];
-	int		code;
-	int		status;
 
-	outfile = open_file(ac, argv);
+	open_file(ac, argv, &outfile);
 	if (pipe(fd[0]) == -1)
 		return (ft_putstr_fd("pipe() has failed!!\n", 2), exit(1));
 	pid = fork();
-	if (pid == 0 || pid == -1)
-		child_process(fd, argv, env, pid);
+	if (pid == -1)
+		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
+	if (pid == 0)
+		child_process(fd, argv, env);
 	else
 	{
 		close(fd[0][1]);
-		waitpid(pid, &status, 0);
-		if (!WIFEXITED(status))
-		{
-			code = WEXITSTATUS(status);
-			exit(code);
-		}
-		if (WIFEXITED(status))
-		{
-			code = WEXITSTATUS(status);
-			if (code != 0)
-				exit(code);
-		}	
+		wait(NULL);
 		if (dup2(fd[0][0], STDIN_FILENO) == -1)
 			return (ft_putstr_fd("dup2() has failed!!\n", 2), exit(1));
 		exec_cmds(&outfile, argv[4], env);
