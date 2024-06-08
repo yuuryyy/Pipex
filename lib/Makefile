@@ -6,7 +6,7 @@
 #    By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/03 01:10:21 by ychagri           #+#    #+#              #
-#    Updated: 2024/05/25 20:10:09 by ychagri          ###   ########.fr        #
+#    Updated: 2024/06/07 18:55:19 by ychagri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,8 +34,8 @@ OBJS = $(SRC:.c=.o)
 
 all:$(NAME)
 
-$(NAME): $(OBJS) $
-	$(ARC) $(NAME) $(OBJS) $
+$(NAME): $(OBJS)
+	$(ARC) $(NAME) $(OBJS)
 	
 %.o : %.c $(LIBRARY) 
 	$(CC) $(CFLAGS) -c $<

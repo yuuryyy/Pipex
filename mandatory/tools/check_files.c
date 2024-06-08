@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:59:36 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/03 16:32:56 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/08 00:55:57 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	check_files(char **argv, int ac)
 		if (access(argv[1], F_OK) == 0 && access(argv[1], R_OK) == -1)
 			return (ft_putstr_fd("Permission denied: ", 2), ft_putstr_fd(argv[1], 2), ft_putchar_fd('\n', 2), exit(1));
 		else if (access(argv[1], F_OK) == -1)
-			return (ft_putstr_fd("No such file or directory: ", 2), ft_putstr_fd(argv[1], 2), ft_putchar_fd('\n', 2), exit(2));
+			return (ft_putstr_fd("No such file or directory: ", 2), ft_putstr_fd(argv[1], 2), ft_putchar_fd('\n', 2), exit(1));
 	}
 	else if (access(argv[ac - 1], F_OK) == 0)
 	{
@@ -31,7 +31,6 @@ void	check_files(char **argv, int ac)
 			ft_putchar_fd('\n', 2);
 			exit (1);
 		}
-		return ;
 	}
 }
 
