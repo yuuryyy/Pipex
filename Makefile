@@ -6,7 +6,7 @@
 #    By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/12 19:24:10 by ychagri           #+#    #+#              #
-#    Updated: 2024/05/26 21:39:20 by ychagri          ###   ########.fr        #
+#    Updated: 2024/06/11 20:07:07 by ychagri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRCS	:=	main.c \
 			mandatory/tools/get_cmd.c \
 			mandatory/tools/get_path.c \
 			mandatory/tools/here_doc.c \
+			mandatory/tools/multipipe.c \
 
 OBGS	:= $(SRCS:.c=.o)
 

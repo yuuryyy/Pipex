@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 19:25:23 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/08 17:01:12 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/11 20:11:39 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,24 @@ void	execution(char **env, char **cmd)
 	dirs = ft_split(fullpath, ':');
 	free(fullpath);
 	if (!dirs)
-	{
-		free_arr(cmd);
-		exit(1);
-	}
+		return (ft_putstr_fd("Path not found!!\n", 2), free_arr(cmd), exit(1));
 	err_set = execvee(dirs, cmd);
 	if (err_set == -1)
 		return (ft_putstr_fd("command not found: ", 2),
-			ft_putstr_fd(cmd[0], 2), ft_putstr_fd("\n", 2), exit(127));
+			ft_putstr_fd(cmd[0], 2), ft_putstr_fd("\n", 2),free_arr(cmd), free_arr(dirs), exit(127));
 }
 
-void	outfile2(char *arg, char **env)
+void	outfile2(char **argv, char *arg, char **env, int ac)
 {
 	char	**cmd;
+	int		outfile;
 
+	check_files(argv, ac, OUTFILE, 0);
+	outfile = open(argv[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (outfile == -1)
+		return (ft_putstr_fd("open has failed\n", 2), exit(1));
+	if (dup2(outfile, STDOUT_FILENO) == -1)
+		return (close(outfile), ft_putstr_fd("dup2() has failed!!\n", 2), exit(1));   
 	cmd = ft_split(arg, ' ');
 	if (ft_strchr(cmd[0], '/') == 0)
 		execution(env, cmd);
@@ -70,7 +74,7 @@ void	outfile2(char *arg, char **env)
 	}
 }
 
-void	cmd_outfile(char *argv, char **env)
+void	cmd_outfile(char **argv, char *cmd, char **env, int ac)
 {
 	int		pid;
 	int		status;
@@ -80,7 +84,7 @@ void	cmd_outfile(char *argv, char **env)
 	if (pid == -1)
 		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
 	if (pid == 0)
-		outfile2(argv, env);
+		outfile2(argv, cmd, env, ac);
 	else
 	{
 		waitpid(pid, &status, 0);
@@ -99,11 +103,7 @@ void	exec_cmds(int *fd_write, char *argv, char **env)
 
 	cmd = ft_split(argv, ' ');
 	if (!cmd)
-	{
-		ft_putstr_fd("ft_split has failed ", 2);
-		close(*fd_write);
-		exit(1);
-	}
+		return (ft_putstr_fd("ft_split failed splitting the command \n ", 2),close(*fd_write), exit(1));
 	if (dup2(*fd_write, STDOUT_FILENO) == -1)
 	{
 		ft_putstr_fd("dup2() has failed!!\n", 2);
