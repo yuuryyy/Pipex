@@ -6,12 +6,13 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 19:25:23 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/11 20:11:39 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/11 21:06:17 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Inc/pipex.h"
 #include <sys/wait.h>
+
 
 int	execvee(char **dirs, char **cmd)
 {

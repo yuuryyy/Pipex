@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 18:27:05 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/11 20:08:55 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/11 21:08:59 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	forking(char *cmd, char **argv, char **env, int flag, int ac)
 		ft_putstr_fd("pipe() has failed!!\n", 2);
 		exit(1);
 	}
+	// fprintf(stderr)
 	pid = fork();
 	if (pid == -1)
 	{
@@ -56,6 +57,7 @@ void	forking(char *cmd, char **argv, char **env, int flag, int ac)
 		            return (close (infile), close(fd[1]),
 			        ft_putstr_fd("Dup2() has failed ; for the file named : ", 2),
 			        ft_putstr_fd(argv[1], 2), ft_putstr_fd("\n", 2), exit(1));
+			
         }
 		exec_cmds(&fd[1], cmd, env);
 	}

@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 20:58:53 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/11 20:04:39 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/11 21:05:07 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include "../../lib/Libft/libft.h"
 # include <string.h>
 # include <sys/wait.h>
+
+
+#define LOG(x) fprintf(stderr, "%s ",x)
 
 # define INFILE 0
 # define OUTFILE 1
