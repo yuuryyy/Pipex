@@ -27,7 +27,7 @@ void	open_file(int ac, char **argv, int *outfile)
 	*outfile = open(argv[ac - 1], O_RDWR | O_APPEND | O_CREAT, 0644);
 	if (*outfile == -1)
 	{
-		if (strchr(argv[ac - 1], '/'))
+		if (ft_strchr(argv[ac - 1], '/'))
 		{
 			return (ft_putstr_fd("No such file or directory: ", 2),
 				ft_putstr_fd(argv[ac - 1], 2), ft_putstr_fd("\n", 2), exit(1));
@@ -83,7 +83,7 @@ void	read_line(char *limiter, int *fd)
 			return (ft_putstr_fd("read() has failed!!\n", 2), exit(1));
 		if (*c == '\n')
 			buffer = ft_strjoin2(buffer, "\n");
-		if (ft_strncmp(buffer, limiter, strlen(limiter)) == 0)
+		if (ft_strncmp(buffer, limiter,ft_strlen(limiter)) == 0)
 			break ;
 		write (fd[1], buffer, ft_strlen(buffer));
 	}
