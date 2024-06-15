@@ -38,31 +38,6 @@ void	open_file(int ac, char **argv, int *outfile)
 	}
 }
 
-char	*ft_strjoin2(char *s1, char *s2)
-{
-	char	*join;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	join = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
-	if (!join)
-		return (NULL);
-	while (s1 && s1[i])
-	{
-		join[i] = s1[i];
-		i++;
-	}
-	while (s2 && s2[j])
-	{
-		join[i + j] = s2[j];
-		j++;
-	}
-	join[i + j] = '\0';
-	return (join);
-}
-
 void	read_line(char *limiter, int *fd)
 {
 	char	c[2];
@@ -72,6 +47,7 @@ void	read_line(char *limiter, int *fd)
 	while (1)
 	{
 		buffer = NULL;
+		write (0, "> ", 2);
 		read_bytes = read(0, c, 1);
 		while (*c && read_bytes == 1 && *c != '\n' )
 		{
@@ -102,17 +78,45 @@ void	child_process(int fd[2][2], char **argv, char **env)
 	read_line(limiter, fd[1]);
 	if (dup2(fd[1][0], STDIN_FILENO) == -1)
 		return (ft_putstr_fd("dup2() has failed!!\n", 2), exit(1));
+	dup2(fd[0][1], STDOUT_FILENO);
 	close(fd[1][1]);
-	exec_cmds(&fd[0][1], argv[3], env);
+	close(fd[1][0]);
+	exec_cmds( argv[3], env);
 }
+void	last_cmd(char **argv, char **env, int ac)
+{
+	int		outfile;
+	int		status;
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
+	if (pid == 0)
+	{
+		open_file(ac, argv, &outfile);
+		dup2(outfile, STDOUT_FILENO);
+		exec_cmds(argv[4], env);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		while (wait(NULL) != -1)
+			continue ;
+		if (WIFEXITED(status))
+		{
+			exit(WEXITSTATUS(status));
+		}
+	}
+}
+
 
 void	here_doc(int ac, char **argv, char **env)
 {
 	pid_t	pid;
-	int		outfile;
 	int		fd[2][2];
 
-	open_file(ac, argv, &outfile);
+	
 	if (pipe(fd[0]) == -1)
 		return (ft_putstr_fd("pipe() has failed!!\n", 2), exit(1));
 	pid = fork();
@@ -120,12 +124,8 @@ void	here_doc(int ac, char **argv, char **env)
 		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
 	if (pid == 0)
 		child_process(fd, argv, env);
-	else
-	{
-		close(fd[0][1]);
-		wait(NULL);
-		if (dup2(fd[0][0], STDIN_FILENO) == -1)
-			return (ft_putstr_fd("dup2() has failed!!\n", 2), exit(1));
-		exec_cmds(&outfile, argv[4], env);
-	}
+	dup2(fd[0][0], STDIN_FILENO);
+	pid = fork();
+	if (pid == 0)
+		last_cmd(argv, env, ac);
 }
