@@ -68,14 +68,15 @@ void	read_line(char *limiter, int *fd)
 
 void	child_process(int fd[2], char **argv, char **env)
 {
+	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
-	close(fd[0]);
 	exec_cmds( argv[3], env);
 }
 void	last_cmd(char **argv, char **env, int ac)
 {
 	int		outfile;
+	int		status;
 	pid_t	pid;
 
 
@@ -84,21 +85,20 @@ void	last_cmd(char **argv, char **env, int ac)
 		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
 	if (pid == 0)
 
-	{	
+	{
 		exec_cmds(argv[4], env);
-
 	}
 	else
-		return ;
-	// 	// if (waitpid(pid, &status, 0) == -1)
-	// 	// 	fprintf(stderr, "---------wait here");
-	// 	// while (wait(NULL) != -1)
-	// 	// 	continue ;
-	// 	// if (WIFEXITED(status))
-	// 	// {
-	// 	// 	exit(WEXITSTATUS(status));
-	// 	// }
-	// }
+	{
+		// return ;
+		waitpid(pid, &status, 0);
+		while (wait(NULL) != -1)
+			continue ;
+		if (WIFEXITED(status))
+		{
+			exit(WEXITSTATUS(status));
+		}
+	}
 }
 
 // void	f(){system("leaks pipex");}
@@ -120,6 +120,7 @@ void	here_doc(int ac, char **argv, char **env)
 	free(limiter);
 	dup2(fd[0][0], STDIN_FILENO);
 	close(fd[0][0]);
+	close(fd[0][1]);
 	if (pipe(fd[1]) == -1)
 		return (ft_putstr_fd("pipe() has failed!!\n", 2), exit(1));
 	pid = fork();
