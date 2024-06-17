@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: youssra <youssra@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 19:25:23 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/15 00:55:47 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/17 23:22:00 by youssra          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,44 +48,35 @@ void	execution(char **env, char **cmd)
 			ft_putstr_fd(cmd[0], 2), ft_putstr_fd("\n", 2),free_arr(cmd), free_arr(dirs), exit(127));
 }
 
-void	outfile2(char **argv, char *arg, char **env, int ac, int outfile)
+void	outfile2(char **argv, char *arg, char **env, int ac )
 {
-	char	**cmd;
+	int outfile;
 
-	check_files(argv, ac, OUTFILE);
+	// check_files(argv, ac, OUTFILE);
+	if ((outfile = open(argv[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644)) == -1)
+		return (exit(14));
 	dup2(outfile, STDOUT_FILENO);
-	cmd = ft_split(arg, ' ');
-	if (ft_strchr(cmd[0], '/') == 0)
-		execution(env, cmd);
-	else
-	{
-		if (execve(cmd[0], cmd, NULL) == -1)
-		{
-			ft_putstr_fd("No such a file or directory: ", 2);
-			ft_putstr_fd(cmd[0], 2);
-			ft_putstr_fd("\n", 2);
-			free_arr(cmd);
-			exit(127);
-		}
-	}
+	close(outfile);
+	exec_cmds(argv[ac - 2], env);
 }
 
-void	cmd_outfile(char **argv, char *cmd, char **env, int ac)
+void	cmd_outfile(char **argv,char **env, int ac)
 {
 	int		pid;
 	int		status;
 	int		code;
-	int		outfile;
 
-	outfile = open(argv[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	check_files(argv, ac, OUTFILE);
 	pid = fork();
 	if (pid == -1)
 		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
 	if (pid == 0)
-		outfile2(argv, cmd, env, ac, outfile);
+	{
+
+		outfile2(argv, argv[ac - 2], env, ac);
+	}
 	else
 	{
-		close(STDIN_FILENO);
 		waitpid(pid, &status, 0);
 		while (wait(NULL) != -1)
 			continue ;
