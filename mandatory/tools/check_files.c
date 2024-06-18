@@ -6,7 +6,7 @@
 /*   By: youssra <youssra@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:59:36 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/17 23:04:39 by youssra          ###   ########.fr       */
+/*   Updated: 2024/06/18 19:17:25 by youssra          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@ void	check_files(char **argv, int ac, int flag)
 	else if (flag == OUTFILE)
 	{
 		if (access(argv[ac - 1], F_OK) == 0 && access(argv[ac - 1], W_OK) == -1)
-				return (ft_putstr_fd("Permission denied: ", 2), ft_putstr_fd(argv[ac - 1], 2),
-					ft_putchar_fd('\n', 2),exit(1));
-		else if (access(argv[ac - 1], F_OK) == -1 && ft_strchr(argv[ac - 1], '/'))
+			return (ft_putstr_fd("Permission denied: ", 2),
+				ft_putstr_fd(argv[ac - 1], 2),
+				ft_putchar_fd('\n', 2), exit(1));
+		else if (access(argv[ac - 1], F_OK) == -1
+			&& ft_strchr(argv[ac - 1], '/'))
 			return (ft_putstr_fd("No such file or directory: ", 2),
 				ft_putstr_fd(argv[ac - 1], 2), ft_putchar_fd('\n', 2), exit(1));
 	}

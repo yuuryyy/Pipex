@@ -6,13 +6,12 @@
 /*   By: youssra <youssra@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 19:25:23 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/17 23:22:00 by youssra          ###   ########.fr       */
+/*   Updated: 2024/06/18 19:30:18 by youssra          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Inc/pipex.h"
 #include <sys/wait.h>
-
 
 int	execvee(char **dirs, char **cmd)
 {
@@ -45,22 +44,23 @@ void	execution(char **env, char **cmd)
 	err_set = execvee(dirs, cmd);
 	if (err_set == -1)
 		return (ft_putstr_fd("command not found: ", 2),
-			ft_putstr_fd(cmd[0], 2), ft_putstr_fd("\n", 2),free_arr(cmd), free_arr(dirs), exit(127));
+			ft_putstr_fd(cmd[0], 2), ft_putstr_fd("\n", 2),
+			free_arr(cmd), free_arr(dirs), exit(127));
 }
 
-void	outfile2(char **argv, char *arg, char **env, int ac )
+void	outfile2(char **argv, char **env, int ac )
 {
-	int outfile;
+	int	outfile;
 
-	// check_files(argv, ac, OUTFILE);
-	if ((outfile = open(argv[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644)) == -1)
+	outfile = open(argv[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (outfile == -1)
 		return (exit(14));
 	dup2(outfile, STDOUT_FILENO);
 	close(outfile);
 	exec_cmds(argv[ac - 2], env);
 }
 
-void	cmd_outfile(char **argv,char **env, int ac)
+void	cmd_outfile(char **argv, char **env, int ac)
 {
 	int		pid;
 	int		status;
@@ -71,10 +71,7 @@ void	cmd_outfile(char **argv,char **env, int ac)
 	if (pid == -1)
 		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
 	if (pid == 0)
-	{
-
-		outfile2(argv, argv[ac - 2], env, ac);
-	}
+		outfile2(argv, env, ac);
 	else
 	{
 		waitpid(pid, &status, 0);

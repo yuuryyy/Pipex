@@ -6,7 +6,7 @@
 /*   By: youssra <youssra@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/11 18:27:05 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/18 19:13:53 by youssra          ###   ########.fr       */
+/*   Updated: 2024/06/18 19:29:41 by youssra          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	multipipe(char **argv, int ac, char **env)
 	int	infile;
 
 	cmd = 2;
+	infile = -1;
 	while (argv[cmd] && cmd < ac - 2)
 	{
 		if (cmd == 2)

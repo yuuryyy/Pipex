@@ -6,7 +6,7 @@
 /*   By: youssra <youssra@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/12 20:58:53 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/17 23:26:03 by youssra          ###   ########.fr       */
+/*   Updated: 2024/06/18 19:20:46 by youssra          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 
 # define INFILE 0
 # define OUTFILE 1
-// # define 
-// # define 
 
 void	exec_cmds(char *argv, char **env);
 void	multipipe(char **argv, int ac, char **env);

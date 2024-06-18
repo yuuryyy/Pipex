@@ -59,11 +59,12 @@ void	read_line(char *limiter, int *fd)
 			return (ft_putstr_fd("read() has failed!!\n", 2), exit(1));
 		if (*c == '\n')
 			buffer = ft_strjoin2(buffer, "\n");
-		if (ft_strncmp(buffer, limiter,ft_strlen(limiter)) == 0)
+		if (ft_strncmp(buffer, limiter, ft_strlen(limiter)) == 0)
 			break ;
 		write (fd[1], buffer, ft_strlen(buffer));
 		free(buffer);
 	}
+	close(fd[1]);
 }
 
 void	child_process(int fd[2], char **argv, char **env)
@@ -71,47 +72,42 @@ void	child_process(int fd[2], char **argv, char **env)
 	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
-	exec_cmds( argv[3], env);
+	exec_cmds(argv[3], env);
 }
-void	last_cmd(char **argv, char **env, int ac)
+
+void	last_cmd(char **argv, char **env, int ac, int *fd)
 {
-	int		outfile;
 	int		status;
 	pid_t	pid;
+	int		outfile;
 
-
+	close(fd[1]);
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]);
+	open_file(ac, argv, &outfile);
+	dup2(outfile, STDOUT_FILENO);
+	close(outfile);
 	pid = fork();
 	if (pid == -1)
 		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
 	if (pid == 0)
-
-	{
 		exec_cmds(argv[4], env);
-	}
 	else
 	{
-		// return ;
 		waitpid(pid, &status, 0);
 		while (wait(NULL) != -1)
 			continue ;
 		if (WIFEXITED(status))
-		{
 			exit(WEXITSTATUS(status));
-		}
 	}
 }
-
-// void	f(){system("leaks pipex");}
 
 void	here_doc(int ac, char **argv, char **env)
 {
 	pid_t	pid;
 	int		fd[2][2];
 	char	*limiter;
-	int		outfile;
 
-	// atexit(f);
-	// open_file(ac, argv, &outfile);
 	if (pipe(fd[0]) == -1)
 		return (ft_putstr_fd("pipe() has failed!!\n", 2), exit(1));
 	limiter = NULL;
@@ -120,37 +116,15 @@ void	here_doc(int ac, char **argv, char **env)
 	free(limiter);
 	dup2(fd[0][0], STDIN_FILENO);
 	close(fd[0][0]);
-	close(fd[0][1]);
 	if (pipe(fd[1]) == -1)
 		return (ft_putstr_fd("pipe() has failed!!\n", 2), exit(1));
 	pid = fork();
 	if (pid == -1)
 		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
 	if (pid == 0)
-	{
 		child_process(fd[1], argv, env);
-	}	
 	else
 	{
-		close(fd[1][1]);
-		dup2(fd[1][0], STDIN_FILENO);
-		close(fd[1][0]);
-		open_file(ac, argv, &outfile);
-		dup2(outfile, STDOUT_FILENO);
-		last_cmd(argv, env, ac);
+		last_cmd(argv, env, ac, fd[1]);
 	}
-
-	// char buffer[10];
-	// read(0, buffer, 6);
-	// fprintf(stderr,"--------%s\n", buffer);
-	// pid = fork();
-	// if (pid == -1)
-	// 	return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
-	// if (pid == 0)
-	// 	child_process(fd[1], argv, env);
-	
-	// dup2(fd[0][0], STDIN_FILENO);
-	// pid = fork();
-	// if (pid == 0)
-	// 	last_cmd(argv, env, ac);
 }
