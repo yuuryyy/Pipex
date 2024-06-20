@@ -40,30 +40,18 @@ void	open_file(int ac, char **argv, int *outfile)
 
 void	read_line(char *limiter, int *fd)
 {
-	char	c[2];
 	char	*buffer;
-	int		read_bytes;
 
 	while (1)
 	{
-		buffer = NULL;
-		write (0, "> ", 2);
-		read_bytes = read(0, c, 1);
-		while (*c && read_bytes == 1 && *c != '\n' )
-		{
-			c[1] = '\0';
-			buffer = ft_strjoin2(buffer, c);
-			read_bytes = read(0, c, 1);
-		}
-		if (read_bytes == -1)
-			return (ft_putstr_fd("read() has failed!!\n", 2), exit(1));
-		if (*c == '\n')
-			buffer = ft_strjoin2(buffer, "\n");
+		write (0, "youssra_pipex> ", 16);
+		buffer = get_next_line(0);
 		if (ft_strncmp(buffer, limiter, ft_strlen(limiter)) == 0)
 			break ;
 		write (fd[1], buffer, ft_strlen(buffer));
 		free(buffer);
 	}
+	free(buffer);
 	close(fd[1]);
 }
 
@@ -111,7 +99,7 @@ void	here_doc(int ac, char **argv, char **env)
 	if (pipe(fd[0]) == -1)
 		return (ft_putstr_fd("pipe() has failed!!\n", 2), exit(1));
 	limiter = NULL;
-	limiter = ft_strjoin2(argv[2], "\n");
+	limiter = ft_strjoin3(argv[2], "\n");
 	read_line(limiter, fd[0]);
 	free(limiter);
 	dup2(fd[0][0], STDIN_FILENO);

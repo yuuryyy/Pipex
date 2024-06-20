@@ -6,7 +6,7 @@
 /*   By: youssra <youssra@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 19:59:36 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/18 19:17:25 by youssra          ###   ########.fr       */
+/*   Updated: 2024/06/20 20:16:21 by youssra          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	free_arr(char **str)
 	free(str);
 }
 
-char	*ft_strjoin2(char *s1, char *s2)
+char	*ft_strjoin3(char *s1, char *s2)
 {
 	char	*join;
 	int		i;

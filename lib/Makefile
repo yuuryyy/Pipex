@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+         #
+#    By: youssra <youssra@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/03 01:10:21 by ychagri           #+#    #+#              #
-#    Updated: 2024/06/07 18:55:19 by ychagri          ###   ########.fr        #
+#    Updated: 2024/06/20 18:13:36 by youssra          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,9 @@ SRC = Libft/ft_isdigit.c Libft/ft_memset.c  Libft/ft_isprint.c Libft/ft_split.c 
 		Libft/ft_isascii.c Libft/ft_memmove.c Libft/ft_isascii.c Libft/ft_strchr.c Libft/ft_strdup.c Libft/ft_substr.c Libft/ft_putchar_fd.c \
 		Libft/ft_lstnew.c  Libft/ft_lstadd_front.c Libft/ft_lstadd_back.c Libft/ft_lstsize.c Libft/ft_lstlast.c Libft/ft_lstdelone.c \
 		Libft/ft_lstclear.c Libft/ft_lstiter.c Libft/ft_lstmap.c\
+		Get_next_line/get_next_line.c \
+		Get_next_line/get_next_line_utils.c \
+		
 
 
 OBJS = $(SRC:.c=.o)

@@ -1,0 +1,19 @@
+// int		i;
+
+// 	i = 0;
+// 	while (limiter[i])
+// 		i++;
+// 	limiter[i++] = '\n';
+// 	limiter[i] = '\0';
+// char	*buffer;
+
+// 	while (1)
+// 	{
+// 		write (0, "> ", 2);
+// 		buffer = get_next_line(0);
+// 		if (ft_strncmp(buffer, limiter, ft_strlen(limiter)) == 0)
+// 			break ;
+// 		write (fd[1], buffer, ft_strlen(buffer));
+// 		free(buffer);
+// 	}
+// 	free(buffer);
