@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: youssra <youssra@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 19:25:23 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/18 19:30:18 by youssra          ###   ########.fr       */
+/*   Updated: 2024/06/22 19:32:17 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	outfile2(char **argv, char **env, int ac )
 
 	outfile = open(argv[ac - 1], O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (outfile == -1)
-		return (exit(14));
+		return (exit(1));
 	dup2(outfile, STDOUT_FILENO);
 	close(outfile);
 	exec_cmds(argv[ac - 2], env);
@@ -75,6 +75,7 @@ void	cmd_outfile(char **argv, char **env, int ac)
 	else
 	{
 		waitpid(pid, &status, 0);
+		close (STDIN_FILENO);
 		while (wait(NULL) != -1)
 			continue ;
 		if (WIFEXITED(status))
