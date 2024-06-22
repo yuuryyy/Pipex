@@ -57,9 +57,9 @@ void	read_line(char *limiter, int *fd)
 
 void	child_process(int fd[2], char **argv, char **env)
 {
-	close(fd[0]);
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
+	close(fd[0]);
 	exec_cmds(argv[3], env);
 }
 

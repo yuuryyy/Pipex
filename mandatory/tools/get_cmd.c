@@ -6,7 +6,7 @@
 /*   By: ychagri <ychagri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 19:25:23 by ychagri           #+#    #+#             */
-/*   Updated: 2024/06/22 19:32:17 by ychagri          ###   ########.fr       */
+/*   Updated: 2024/06/22 20:00:18 by ychagri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,18 @@ void	cmd_outfile(char **argv, char **env, int ac)
 	int		status;
 	int		code;
 
-	check_files(argv, ac, OUTFILE);
 	pid = fork();
 	if (pid == -1)
 		return (ft_putstr_fd("fork() has failed!!\n", 2), exit(1));
 	if (pid == 0)
+	{
+		check_files(argv, ac, OUTFILE);
 		outfile2(argv, env, ac);
+	}
 	else
 	{
-		waitpid(pid, &status, 0);
 		close (STDIN_FILENO);
+		waitpid(pid, &status, 0);
 		while (wait(NULL) != -1)
 			continue ;
 		if (WIFEXITED(status))
@@ -90,13 +92,15 @@ void	cmd_outfile(char **argv, char **env, int ac)
 void	exec_cmds(char *argv, char **env)
 {
 	char	**cmd;
+	int		err;
 
 	cmd = ft_split(argv, ' ');
 	if (ft_strchr(cmd[0], '/') == 0)
 		execution(env, cmd);
 	else
 	{
-		if (execve(cmd[0], cmd, NULL) == -1)
+		err = execve(cmd[0], cmd, NULL);
+		if (err == -1)
 		{
 			return (ft_putstr_fd("No such a file or directory: ", 2),
 				ft_putstr_fd(cmd[0], 2), ft_putchar_fd('\n', 2),
